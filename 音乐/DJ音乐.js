@@ -1,8 +1,7 @@
 // @name DJ音乐[听] - OmniBox
-// @version 1.0.4
+// @version 1.0.7
 // @author https://github.com/hjdhnx/drpy-node/blob/main/spider/js/DJ%E9%9F%B3%E4%B9%90%5B%E5%90%AC%5D.js
 // @origin https://github.com/hjdhnx/drpy-node/blob/main/spider/js/DJ%E9%9F%B3%E4%B9%90%5B%E5%90%AC%5D.js
-// @indexs 1
 // @push 0
 // @dependencies cheerio
 // @downloadURL https://gh-proxy.org/https://github.com/Silent1566/OmniBox-Spider/raw/refs/heads/main/音乐/DJ音乐.js
@@ -236,12 +235,10 @@ async function play(params, context) {
     }
 
     if (music?.file) {
-      const base = new URL(playId, HOST);
-      const url = `${base.protocol}//mp4.djuu.com/${music.file}.m4a`;
+      const url = music.file;
       await OmniBox.log("info", `[play] hit music.file -> ${url}`);
       return {
         urls: [{ name: "播放", url }],
-        flag,
         header: { "User-Agent": UA, Referer: HOST + "/" },
         parse: 0,
       };
@@ -253,7 +250,6 @@ async function play(params, context) {
       await OmniBox.log("info", `[play] hit direct media -> ${directM4a[0]}`);
       return {
         urls: [{ name: "播放", url: directM4a[0] }],
-        flag,
         header: { "User-Agent": UA, Referer: HOST + "/" },
         parse: 0,
       };
@@ -267,7 +263,6 @@ async function play(params, context) {
       await OmniBox.log("info", `[play] hit loose file -> ${url}`);
       return {
         urls: [{ name: "播放", url }],
-        flag,
         header: { "User-Agent": UA, Referer: HOST + "/" },
         parse: 0,
       };
@@ -277,6 +272,6 @@ async function play(params, context) {
     throw new Error(`未提取到播放地址，已尝试: ${tried.join(" | ")}`);
   } catch (e) {
     await OmniBox.log("error", `[play] ${e.message}`);
-    return { urls: [], flag: String(params?.flag || "DJ专线"), header: { "User-Agent": UA }, parse: 0 };
+    return { urls: [], header: { "User-Agent": UA }, parse: 0 };
   }
 }
